@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JAKKAL — App Architecture & Build Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --saffron:#E8930A; --earth:#C4622D; --deep:#1A0F0A; --forest:#2D4A2D;
+  --sand:#F5E6C8; --muted:#8B7355; --bg:#FAF6EE; --white:#FDF8F0;
+  --rule:rgba(232,147,10,0.18); --glass:rgba(232,147,10,0.06);
+  --font-d:'Cormorant Garamond',Georgia,serif; --font-ui:'DM Sans',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--deep);font-family:var(--font-ui);font-size:14px;line-height:1.75;}
+a{color:var(--earth);text-decoration:none;}
+
+/* LAYOUT */
+.page{max-width:1100px;margin:0 auto;padding:0 32px 80px;}
+
+/* TOP HEADER */
+.top-header{background:var(--deep);color:var(--sand);padding:28px 32px 24px;margin-bottom:0;border-bottom:4px solid var(--saffron);}
+.top-header .brand{font-family:var(--font-d);font-size:32px;font-weight:700;color:var(--saffron);letter-spacing:2px;}
+.top-header .doc-title{font-size:13px;opacity:.55;letter-spacing:3px;text-transform:uppercase;margin-top:4px;}
+
+/* SECTION NAV */
+.section-nav{background:var(--deep);color:var(--sand);padding:12px 32px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(232,147,10,.2);position:sticky;top:0;z-index:100;}
+.section-nav a{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(245,230,200,.5);padding:5px 10px;border-radius:3px;transition:all .2s;}
+.section-nav a:hover{background:rgba(232,147,10,.15);color:var(--saffron);}
+
+/* SECTIONS */
+.section{padding:52px 0 0;}
+.section-id{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--saffron);font-weight:600;margin-bottom:10px;}
+.section h2{font-family:var(--font-d);font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.1;margin-bottom:14px;}
+.divider{width:44px;height:3px;background:var(--saffron);border-radius:2px;margin-bottom:24px;}
+.section p{max-width:760px;color:rgba(26,15,10,.72);margin-bottom:14px;}
+.section p strong{color:var(--deep);font-weight:600;}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:24px;}
+.card-grid{display:grid;gap:16px;}
+.card-grid-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+.card-grid-3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+.card-grid-4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.card h3{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--deep);}
+.card p{font-size:13px;color:rgba(26,15,10,.65);max-width:100%;margin-bottom:0;}
+.card-icon{font-size:22px;margin-bottom:10px;}
+.card-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--saffron);font-weight:700;margin-bottom:6px;}
+
+/* TAG/BADGE */
+.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:3px;}
+.badge-saffron{background:rgba(232,147,10,.15);color:var(--earth);}
+.badge-green{background:rgba(45,74,45,.12);color:var(--forest);}
+.badge-red{background:rgba(196,98,45,.12);color:var(--earth);}
+.badge-muted{background:rgba(139,115,85,.12);color:var(--muted);}
+
+/* COMPARISON TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--rule);}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px;}
+thead tr{background:rgba(232,147,10,.1);}
+thead th{padding:12px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--saffron);}
+tbody tr{border-bottom:1px solid rgba(232,147,10,.07);}
+tbody tr:hover{background:rgba(232,147,10,.03);}
+tbody td{padding:11px 14px;vertical-align:top;color:rgba(26,15,10,.72);line-height:1.55;}
+tbody td:first-child{font-weight:500;color:var(--deep);}
+.pro{color:#2a7a2a;font-weight:600;}
+.con{color:#a33;}
+.neutral{color:var(--muted);}
+
+/* TIER LIST */
+.tier-list{display:flex;flex-direction:column;gap:0;}
+.tier-item{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--rule);align-items:start;}
+.tier-item:last-child{border-bottom:none;}
+.tier-name{font-weight:600;font-size:14px;color:var(--deep);}
+.tier-sub{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.5px;}
+
+/* ARCH STACK */
+.arch-stack{display:flex;flex-direction:column;gap:3px;margin:16px 0;}
+.arch-layer{padding:14px 20px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.arch-layer-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.arch-layer-items{display:flex;gap:8px;flex-wrap:wrap;}
+.arch-chip{font-size:11px;padding:4px 10px;border-radius:3px;font-weight:500;}
+.layer-ui{background:rgba(45,74,45,.1);border-left:3px solid var(--forest);}
+.layer-ui .arch-chip{background:rgba(45,74,45,.15);color:var(--forest);}
+.layer-api{background:rgba(232,147,10,.08);border-left:3px solid var(--saffron);}
+.layer-api .arch-chip{background:rgba(232,147,10,.15);color:var(--earth);}
+.layer-svc{background:rgba(196,98,45,.08);border-left:3px solid var(--earth);}
+.layer-svc .arch-chip{background:rgba(196,98,45,.15);color:var(--earth);}
+.layer-data{background:rgba(26,15,10,.06);border-left:3px solid var(--muted);}
+.layer-data .arch-chip{background:rgba(26,15,10,.1);color:var(--muted);}
+.layer-infra{background:rgba(139,115,85,.08);border-left:3px solid var(--muted);}
+.layer-infra .arch-chip{background:rgba(139,115,85,.12);color:var(--muted);}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;margin:16px 0;}
+.tl-item{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--rule);}
+.tl-item:last-child{border-bottom:none;}
+.tl-phase{display:flex;flex-direction:column;gap:3px;}
+.tl-phase-name{font-weight:600;font-size:13px;color:var(--saffron);}
+.tl-phase-time{font-size:11px;color:var(--muted);}
+.tl-content h4{font-size:14px;font-weight:600;margin-bottom:5px;}
+.tl-content p{font-size:13px;color:rgba(26,15,10,.65);max-width:100%;margin:0;}
+.tl-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+
+/* COST TABLE */
+.cost-row{display:grid;grid-template-columns:1fr auto;gap:16px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:baseline;}
+.cost-row:last-child{border-bottom:none;}
+.cost-label{font-size:13px;color:var(--deep);}
+.cost-sub{font-size:11px;color:var(--muted);}
+.cost-val{font-size:14px;font-weight:600;color:var(--saffron);white-space:nowrap;}
+
+/* HIGHLIGHT BOX */
+.highlight{background:var(--glass);border:1px solid var(--rule);border-left:3px solid var(--saffron);border-radius:6px;padding:18px 20px;margin:16px 0;}
+.highlight strong{color:var(--earth);}
+.highlight p{font-size:13px;max-width:100%;margin:0;color:rgba(26,15,10,.72);}
+
+/* WARNING BOX */
+.warn{background:rgba(196,98,45,.06);border:1px solid rgba(196,98,45,.2);border-left:3px solid var(--earth);border-radius:6px;padding:16px 20px;margin:16px 0;}
+.warn p{font-size:13px;max-width:100%;margin:0;color:rgba(26,15,10,.72);}
+
+/* MVP FEATURE LIST */
+.mvp-list{display:flex;flex-direction:column;gap:10px;}
+.mvp-item{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--white);border:1px solid var(--rule);border-radius:8px;}
+.mvp-item.in{border-left:3px solid #2a7a2a;}
+.mvp-item.out{border-left:3px solid var(--muted);opacity:.7;}
+.mvp-icon{font-size:18px;flex-shrink:0;}
+.mvp-text h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.mvp-text p{font-size:12px;color:var(--muted);max-width:100%;margin:0;}
+.mvp-badge{margin-left:auto;flex-shrink:0;align-self:center;}
+
+/* DECISION MATRIX */
+.matrix-wrap{overflow-x:auto;}
+.matrix{width:100%;border-collapse:collapse;font-size:12.5px;}
+.matrix th{padding:10px 12px;background:rgba(26,15,10,.05);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:left;}
+.matrix td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.5;}
+.matrix tr:hover td{background:rgba(232,147,10,.03);}
+.matrix .rec{background:rgba(232,147,10,.08);}
+.rec-tag{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--saffron);background:rgba(232,147,10,.2);padding:2px 7px;border-radius:2px;}
+
+/* STARS */
+.stars{display:flex;gap:2px;}
+.star{width:8px;height:8px;border-radius:50%;background:var(--rule);}
+.star.on{background:var(--saffron);}
+
+/* FOOTER */
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+footer span{font-size:12px;color:var(--muted);}
+
+/* PRINT */
+@media print{.section-nav{display:none;}.section{page-break-inside:avoid;}}
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <div class="brand">JAKKAL</div>
+  <div class="doc-title">App Architecture · MVP · Build Options · Costs · Timeline · Security</div>
+</div>
+
+<nav class="section-nav">
+  <a href="#architecture">Architecture</a>
+  <a href="#mvp">MVP</a>
+  <a href="#build-options">Build Options</a>
+  <a href="#comparison">Comparison</a>
+  <a href="#costs">Costs</a>
+  <a href="#timeline">Timeline</a>
+  <a href="#data">Data</a>
+  <a href="#security">Security</a>
+  <a href="#performance">Performance</a>
+  <a href="#recommendation">Recommendation</a>
+</nav>
+
+<div class="page">
+
+<!-- ═══════════════════════════ 1. ARCHITECTURE ═══════════════════════════ -->
+<div class="section" id="architecture">
+  <div class="section-id">01 · System Architecture</div>
+  <h2>How JAKKAL is built<br /><span style="color:var(--saffron)">under the hood.</span></h2>
+  <div class="divider"></div>
+  <p>JAKKAL follows a <strong>layered mobile-first architecture</strong>. Each layer is independent — you can upgrade or swap one layer without rebuilding everything. This is critical for a startup because it lets you ship fast and improve incrementally.</p>
+
+  <div class="arch-stack">
+    <div class="arch-layer layer-ui">
+      <div>
+        <div class="arch-layer-label">Layer 1 — Client / Frontend</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">What users see and touch</div>
+      </div>
+      <div class="arch-layer-items">
+        <span class="arch-chip">React Native (iOS + Android)</span>
+        <span class="arch-chip">JAKKAL Lite (USSD/SMS)</span>
+        <span class="arch-chip">Progressive Web App (PWA)</span>
+        <span class="arch-chip">Voice UI / Icon-Only mode</span>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:18px;opacity:.3;padding:2px 0;">↕</div>
+    <div class="arch-layer layer-api">
+      <div>
+        <div class="arch-layer-label">Layer 2 — API Gateway</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Single entry point for all requests</div>
+      </div>
+      <div class="arch-layer-items">
+        <span class="arch-chip">REST API</span>
+        <span class="arch-chip">WebSocket (live traffic)</span>
+        <span class="arch-chip">Auth / Rate limiting</span>
+        <span class="arch-chip">HTTPS only</span>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:18px;opacity:.3;padding:2px 0;">↕</div>
+    <div class="arch-layer layer-svc">
+      <div>
+        <div class="arch-layer-label">Layer 3 — Core Services (Backend)</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Business logic — each service is independent</div>
+      </div>
+      <div class="arch-layer-items">
+        <span class="arch-chip">🎙 Wolof ASR Service</span>
+        <span class="arch-chip">🗺 Traffic Engine</span>
+        <span class="arch-chip">🚌 Bus Tracker</span>
+        <span class="arch-chip">🚕 Ride-Hail Integrations</span>
+        <span class="arch-chip">🛡 SafeRoute Service</span>
+        <span class="arch-chip">👤 User / Auth Service</span>
+        <span class="arch-chip">📱 USSD Gateway</span>
+        <span class="arch-chip">🔔 Push Notifications</span>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:18px;opacity:.3;padding:2px 0;">↕</div>
+    <div class="arch-layer layer-data">
+      <div>
+        <div class="arch-layer-label">Layer 4 — Data Layer</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Storage, caching, real-time streams</div>
+      </div>
+      <div class="arch-layer-items">
+        <span class="arch-chip">PostgreSQL (users, routes)</span>
+        <span class="arch-chip">Redis (live traffic cache)</span>
+        <span class="arch-chip">TimescaleDB (traffic history)</span>
+        <span class="arch-chip">S3 / Object Storage (audio)</span>
+        <span class="arch-chip">Message Queue (Kafka/SQS)</span>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:18px;opacity:.3;padding:2px 0;">↕</div>
+    <div class="arch-layer layer-infra">
+      <div>
+        <div class="arch-layer-label">Layer 5 — Infrastructure & AI</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Cloud, AI models, third-party integrations</div>
+      </div>
+      <div class="arch-layer-items">
+        <span class="arch-chip">AWS / GCP (cloud)</span>
+        <span class="arch-chip">Google Maps Platform</span>
+        <span class="arch-chip">Wolof ASR Model (WAXAL)</span>
+        <span class="arch-chip">Yango / Heetch APIs</span>
+        <span class="arch-chip">Wave / Orange Money</span>
+        <span class="arch-chip">Africa's Talking (USSD)</span>
+        <span class="arch-chip">Firebase (push notifs)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <p><strong>Key architectural principle:</strong> Build the Wolof Voice AI and Traffic Engine as independent microservices from day one. This lets you upgrade the AI model without touching the rest of the app, and sell/license these services to other companies later as standalone products.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 2. MVP ═══════════════════════════ -->
+<div class="section" id="mvp">
+  <div class="section-id">02 · Minimum Viable Product (MVP)</div>
+  <h2>What to build <span style="color:var(--saffron)">first.</span></h2>
+  <div class="divider"></div>
+  <p>The MVP is the <strong>smallest version of JAKKAL</strong> that proves the core value and can attract real users and investor attention. Everything else comes later. Your MVP should be launchable in <strong>3–4 months</strong> and cover only the features that answer: "Can this app help someone get from A to B in Dakar today?"</p>
+
+  <h3 style="margin-bottom:14px;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--saffron);">✓ IN the MVP</h3>
+  <div class="mvp-list" style="margin-bottom:24px;">
+    <div class="mvp-item in">
+      <span class="mvp-icon">🎙️</span>
+      <div class="mvp-text">
+        <h4>Wolof voice input (core)</h4>
+        <p>User says destination in Wolof → app understands → gives route. This is your #1 differentiator. Even a basic version must work reliably.</p>
+      </div>
+      <span class="badge badge-green mvp-badge">Must have</span>
+    </div>
+    <div class="mvp-item in">
+      <span class="mvp-icon">🗺️</span>
+      <div class="mvp-text">
+        <h4>Live traffic map (basic)</h4>
+        <p>Color-coded congestion map for Dakar's main corridors. Red/yellow/green. Pull from Google Maps Traffic API initially.</p>
+      </div>
+      <span class="badge badge-green mvp-badge">Must have</span>
+    </div>
+    <div class="mvp-item in">
+      <span class="mvp-icon">🚌</span>
+      <div class="mvp-text">
+        <h4>BRT bus tracker</h4>
+        <p>Real-time location and arrival times for Dakar BRT-01 buses only. Get official CETUD API access. Limit to BRT for MVP — don't try to track informal buses yet.</p>
+      </div>
+      <span class="badge badge-green mvp-badge">Must have</span>
+    </div>
+    <div class="mvp-item in">
+      <span class="mvp-icon">🚕</span>
+      <div class="mvp-text">
+        <h4>Yango ride-hail integration</h4>
+        <p>Deep link into Yango with pre-filled destination. Show estimated price + wait time. No need for direct booking in MVP — a deep link is enough to prove value.</p>
+      </div>
+      <span class="badge badge-saffron mvp-badge">High priority</span>
+    </div>
+    <div class="mvp-item in">
+      <span class="mvp-icon">🖼️</span>
+      <div class="mvp-text">
+        <h4>Icon-only UI mode</h4>
+        <p>Full navigation using icons only — no text required. Tap bus icon → see buses. Critical for illiterate users. This is your inclusivity proof point.</p>
+      </div>
+      <span class="badge badge-green mvp-badge">Must have</span>
+    </div>
+    <div class="mvp-item in">
+      <span class="mvp-icon">👤</span>
+      <div class="mvp-text">
+        <h4>Basic user accounts</h4>
+        <p>Sign up with phone number (not email — most users don't have email). Save home and work locations. Language preference (Wolof/French).</p>
+      </div>
+      <span class="badge badge-saffron mvp-badge">High priority</span>
+    </div>
+    <div class="mvp-item in">
+      <span class="mvp-icon">📱</span>
+      <div class="mvp-text">
+        <h4>Android app (only)</h4>
+        <p>80%+ of Dakar smartphone users are on Android. Skip iOS for MVP — build it in Phase 2 when you have funding proof.</p>
+      </div>
+      <span class="badge badge-green mvp-badge">Must have</span>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:14px;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">✗ NOT in the MVP (Phase 2+)</h3>
+  <div class="mvp-list">
+    <div class="mvp-item out">
+      <span class="mvp-icon">🛡️</span>
+      <div class="mvp-text"><h4>SafeRoute™ safety routing</h4><p>Needs lit-street data that takes time to collect. Phase 2.</p></div>
+      <span class="badge badge-muted mvp-badge">Phase 2</span>
+    </div>
+    <div class="mvp-item out">
+      <span class="mvp-icon">🧠</span>
+      <div class="mvp-text"><h4>AI traffic prediction</h4><p>Needs 3–6 months of data before the ML model works well.</p></div>
+      <span class="badge badge-muted mvp-badge">Phase 2</span>
+    </div>
+    <div class="mvp-item out">
+      <span class="mvp-icon">📱</span>
+      <div class="mvp-text"><h4>USSD / SMS Lite mode</h4><p>Requires telecom carrier partnership. Start negotiations in MVP phase, launch in Phase 2.</p></div>
+      <span class="badge badge-muted mvp-badge">Phase 2</span>
+    </div>
+    <div class="mvp-item out">
+      <span class="mvp-icon">🌍</span>
+      <div class="mvp-text"><h4>Community crowdsourcing</h4><p>Only valuable once you have 10K+ daily active users.</p></div>
+      <span class="badge badge-muted mvp-badge">Phase 2</span>
+    </div>
+    <div class="mvp-item out">
+      <span class="mvp-icon">🏢</span>
+      <div class="mvp-text"><h4>JakkalLines B2B shuttle</h4><p>Separate product requiring separate sales cycle. Phase 3.</p></div>
+      <span class="badge badge-muted mvp-badge">Phase 3</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 3. BUILD OPTIONS ═══════════════════════════ -->
+<div class="section" id="build-options">
+  <div class="section-id">03 · Build Options</div>
+  <h2>From scratch vs.<br /><span style="color:var(--saffron)">AI-assisted building.</span></h2>
+  <div class="divider"></div>
+  <p>There are five realistic paths to building JAKKAL. Each has a different cost, speed, and technical requirement. The right choice depends on your team's skills, your runway, and how fast you need to move.</p>
+
+  <div class="card-grid card-grid-1" style="gap:20px;">
+
+    <!-- OPTION 1 -->
+    <div class="card" style="border-left:3px solid var(--forest);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="card-label">Option A</div>
+          <h3 style="font-size:18px;">Build from scratch — Custom code</h3>
+        </div>
+        <span class="badge badge-muted">Hardest · Most control</span>
+      </div>
+      <p>Your technical co-founder writes every line of code using standard engineering tools: React Native for mobile, Node.js/Python for backend, PostgreSQL for data. Every feature is custom-built to your exact specifications.</p>
+      <div class="card-grid card-grid-2" style="margin-top:16px;gap:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#2a7a2a;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Advantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;">
+            <div>✓ Full ownership of every line of code</div>
+            <div>✓ No vendor lock-in or platform risk</div>
+            <div>✓ Can optimize for Dakar-specific needs</div>
+            <div>✓ Best long-term scalability</div>
+            <div>✓ IP is 100% yours to license or sell</div>
+            <div>✓ No per-user or per-feature fees at scale</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#a33;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Disadvantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:rgba(26,15,10,.65);">
+            <div>✗ 12–18 months to MVP minimum</div>
+            <div>✗ Needs 2–3 senior engineers</div>
+            <div>✗ Highest upfront cost ($80K–$150K)</div>
+            <div>✗ No safety net if engineers leave</div>
+            <div>✗ Everything is your responsibility to debug</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
+        <div><div class="card-label">Cost</div><div style="font-weight:600;color:var(--saffron);">$80K–$150K</div></div>
+        <div><div class="card-label">MVP Time</div><div style="font-weight:600;">12–18 months</div></div>
+        <div><div class="card-label">Team needed</div><div style="font-weight:600;">2–3 engineers</div></div>
+      </div>
+    </div>
+
+    <!-- OPTION 2 -->
+    <div class="card" style="border-left:3px solid var(--saffron);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="card-label">Option B</div>
+          <h3 style="font-size:18px;">Claude + AI coding tools (Recommended for MVP)</h3>
+        </div>
+        <span class="badge badge-saffron">Fastest · Best for founders</span>
+      </div>
+      <p>Use <strong>Claude</strong>, <strong>GitHub Copilot</strong>, and <strong>Claude Code</strong> as your coding co-pilot. Your technical co-founder writes the architecture and makes decisions; AI generates ~60–70% of the boilerplate code, components, and tests. You review, customize, and ship.</p>
+      <div class="card-grid card-grid-2" style="margin-top:16px;gap:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#2a7a2a;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Advantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;">
+            <div>✓ 3–5× faster than writing from scratch</div>
+            <div>✓ MVP in 3–5 months with 1 engineer</div>
+            <div>✓ Still full ownership of code</div>
+            <div>✓ Significantly lower cost ($25K–$60K)</div>
+            <div>✓ Claude can explain, debug, and document</div>
+            <div>✓ Best balance of speed and control</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#a33;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Disadvantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:rgba(26,15,10,.65);">
+            <div>✗ Still requires a technical co-founder</div>
+            <div>✗ AI can generate code with subtle bugs</div>
+            <div>✗ Must review everything carefully</div>
+            <div>✗ AI tools cost $20–$100/mo per developer</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
+        <div><div class="card-label">Cost</div><div style="font-weight:600;color:var(--saffron);">$25K–$60K</div></div>
+        <div><div class="card-label">MVP Time</div><div style="font-weight:600;">3–5 months</div></div>
+        <div><div class="card-label">Team needed</div><div style="font-weight:600;">1 engineer + AI</div></div>
+      </div>
+      <div class="highlight" style="margin-top:14px;">
+        <p><strong>Specific AI tools to use:</strong> Claude Code (terminal) for backend + API logic · GitHub Copilot for IDE autocomplete · Claude.ai for architecture decisions, debugging, writing tests · Cursor IDE for AI-native coding environment · v0.dev (by Vercel) for UI components</p>
+      </div>
+    </div>
+
+    <!-- OPTION 3 -->
+    <div class="card" style="border-left:3px solid var(--earth);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="card-label">Option C</div>
+          <h3 style="font-size:18px;">No-code / Low-code platform</h3>
+        </div>
+        <span class="badge badge-muted">Fastest start · Limited ceiling</span>
+      </div>
+      <p>Build JAKKAL using platforms like <strong>FlutterFlow</strong> (mobile app builder), <strong>Supabase</strong> (backend), and <strong>Bubble.io</strong>. Visual drag-and-drop development. No deep coding required.</p>
+      <div class="card-grid card-grid-2" style="margin-top:16px;gap:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#2a7a2a;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Advantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;">
+            <div>✓ No coding needed for basic features</div>
+            <div>✓ MVP in 6–10 weeks</div>
+            <div>✓ Very low upfront cost ($5K–$20K)</div>
+            <div>✓ Great for testing product concept fast</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#a33;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Disadvantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:rgba(26,15,10,.65);">
+            <div>✗ Wolof ASR is nearly impossible to integrate</div>
+            <div>✗ Cannot build real-time traffic WebSockets</div>
+            <div>✗ Locked to platform (if it shuts down, you lose everything)</div>
+            <div>✗ Expensive at scale ($500–$3,000/mo)</div>
+            <div>✗ Hard to customize for USSD/SMS Lite</div>
+            <div>✗ Investors may view this negatively</div>
+          </div>
+        </div>
+      </div>
+      <div class="warn" style="margin-top:14px;">
+        <p><strong>Critical warning:</strong> JAKKAL's two core features — Wolof voice AI and real-time bus tracking — require custom integration that no-code platforms cannot handle well. No-code works for simple apps; JAKKAL is not a simple app. Use no-code only for a landing page or waitlist, not the full product.</p>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
+        <div><div class="card-label">Cost</div><div style="font-weight:600;color:var(--saffron);">$5K–$20K</div></div>
+        <div><div class="card-label">MVP Time</div><div style="font-weight:600;">6–10 weeks</div></div>
+        <div><div class="card-label">Team needed</div><div style="font-weight:600;">0–1 technical person</div></div>
+      </div>
+    </div>
+
+    <!-- OPTION 4 -->
+    <div class="card" style="border-left:3px solid var(--muted);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="card-label">Option D</div>
+          <h3 style="font-size:18px;">Outsource to a dev agency</h3>
+        </div>
+        <span class="badge badge-muted">Fast if managed well · High risk</span>
+      </div>
+      <p>Hire a software development agency (African or international) to build JAKKAL. You define the requirements; they code it. You stay in the product/business role.</p>
+      <div class="card-grid card-grid-2" style="margin-top:16px;gap:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#2a7a2a;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Advantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;">
+            <div>✓ No technical co-founder needed</div>
+            <div>✓ Can specify exact features upfront</div>
+            <div>✓ African agencies understand local context</div>
+            <div>✓ Fixed price contracts possible</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#a33;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Disadvantages</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:rgba(26,15,10,.65);">
+            <div>✗ Expensive ($40K–$120K)</div>
+            <div>✗ Slow (6–12 months)</div>
+            <div>✗ Communication challenges</div>
+            <div>✗ You depend on them forever for changes</div>
+            <div>✗ Quality is very variable</div>
+            <div>✗ Hard to raise VC if you don't own the code</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
+        <div><div class="card-label">Cost</div><div style="font-weight:600;color:var(--saffron);">$40K–$120K</div></div>
+        <div><div class="card-label">MVP Time</div><div style="font-weight:600;">6–12 months</div></div>
+        <div><div class="card-label">Team needed</div><div style="font-weight:600;">Strong PM skills</div></div>
+      </div>
+    </div>
+
+    <!-- OPTION 5 -->
+    <div class="card" style="border-left:3px solid var(--muted);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <div class="card-label">Option E</div>
+          <h3 style="font-size:18px;">Hybrid: No-code prototype + Claude-assisted full build</h3>
+        </div>
+        <span class="badge badge-green">Best 2-stage strategy</span>
+      </div>
+      <p>Start with a <strong>no-code prototype</strong> (FlutterFlow + Supabase) to demonstrate the concept and win the sponsor. Then use the funding to do a <strong>Claude-assisted full build</strong> (Option B). Two phases, two purposes.</p>
+      <div class="highlight" style="margin-top:12px;">
+        <p><strong>Phase 1 (Pre-funding, 4–6 weeks):</strong> Build a clickable prototype that shows the UI flow, icon mode, and simulated voice interaction. Use this to win your Women in Tech Summit sponsor. Cost: ~$2K–$5K.</p>
+      </div>
+      <div class="highlight" style="margin-top:8px;">
+        <p><strong>Phase 2 (Post-funding, 3–5 months):</strong> Use the $75K seed to build the real app with Claude-assisted custom code. Wolof ASR, real-time traffic, BRT API, Yango integration. This is your actual product.</p>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
+        <div><div class="card-label">Total Cost</div><div style="font-weight:600;color:var(--saffron);">$30K–$65K</div></div>
+        <div><div class="card-label">Prototype</div><div style="font-weight:600;">4–6 weeks</div></div>
+        <div><div class="card-label">Full MVP</div><div style="font-weight:600;">3–5 months post-funding</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 4. COMPARISON ═══════════════════════════ -->
+<div class="section" id="comparison">
+  <div class="section-id">04 · Side-by-Side Comparison</div>
+  <h2>All options <span style="color:var(--saffron)">at a glance.</span></h2>
+  <div class="divider"></div>
+
+  <div class="tbl-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width:120px;">Factor</th>
+          <th>A — From scratch</th>
+          <th>B — Claude + AI tools</th>
+          <th>C — No-code</th>
+          <th>D — Agency</th>
+          <th>E — Hybrid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MVP time</td>
+          <td class="con">12–18 months</td>
+          <td class="pro">3–5 months</td>
+          <td class="pro">6–10 weeks</td>
+          <td class="neutral">6–12 months</td>
+          <td class="pro">4–6 wks prototype<br/>+3–5 mo full</td>
+        </tr>
+        <tr>
+          <td>Total cost</td>
+          <td class="con">$80K–$150K</td>
+          <td class="pro">$25K–$60K</td>
+          <td class="pro">$5K–$20K</td>
+          <td class="con">$40K–$120K</td>
+          <td class="pro">$30K–$65K</td>
+        </tr>
+        <tr>
+          <td>Wolof ASR possible?</td>
+          <td class="pro">✓ Yes</td>
+          <td class="pro">✓ Yes</td>
+          <td class="con">✗ No</td>
+          <td class="pro">✓ Yes</td>
+          <td class="pro">✓ Phase 2</td>
+        </tr>
+        <tr>
+          <td>Real-time traffic?</td>
+          <td class="pro">✓ Full custom</td>
+          <td class="pro">✓ Yes</td>
+          <td class="neutral">Limited</td>
+          <td class="pro">✓ Yes</td>
+          <td class="pro">✓ Phase 2</td>
+        </tr>
+        <tr>
+          <td>Code ownership</td>
+          <td class="pro">100%</td>
+          <td class="pro">100%</td>
+          <td class="con">Partial/None</td>
+          <td class="neutral">Depends on contract</td>
+          <td class="pro">100% Phase 2</td>
+        </tr>
+        <tr>
+          <td>Technical team needed</td>
+          <td class="con">2–3 senior engineers</td>
+          <td class="neutral">1 engineer + AI</td>
+          <td class="pro">0–1</td>
+          <td class="pro">0 (PM skills)</td>
+          <td class="neutral">1 engineer Phase 2</td>
+        </tr>
+        <tr>
+          <td>Scalability ceiling</td>
+          <td class="pro">Unlimited</td>
+          <td class="pro">Unlimited</td>
+          <td class="con">Low (platform limits)</td>
+          <td class="neutral">Medium</td>
+          <td class="pro">Unlimited</td>
+        </tr>
+        <tr>
+          <td>Investor perception</td>
+          <td class="pro">Excellent</td>
+          <td class="pro">Excellent</td>
+          <td class="con">Poor</td>
+          <td class="neutral">OK</td>
+          <td class="pro">Excellent</td>
+        </tr>
+        <tr>
+          <td>Risk level</td>
+          <td class="con">High (time + cost)</td>
+          <td class="pro">Low–Medium</td>
+          <td class="neutral">Medium (platform risk)</td>
+          <td class="con">High (agency risk)</td>
+          <td class="neutral">Low–Medium</td>
+        </tr>
+        <tr class="rec">
+          <td><strong>Recommendation</strong></td>
+          <td class="neutral">If well-funded at start</td>
+          <td><strong class="pro">✦ Best for MVP</strong> <span class="rec-tag">Recommended</span></td>
+          <td class="neutral">Prototype only</td>
+          <td class="neutral">If no tech co-founder</td>
+          <td><strong class="pro">✦ Best overall strategy</strong> <span class="rec-tag">Recommended</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 5. COSTS ═══════════════════════════ -->
+<div class="section" id="costs">
+  <div class="section-id">05 · Cost Breakdown</div>
+  <h2>What it actually <span style="color:var(--saffron)">costs to build.</span></h2>
+  <div class="divider"></div>
+  <p>These are realistic estimates based on African startup rates and current cloud pricing. All figures are in USD.</p>
+
+  <div class="card-grid card-grid-2" style="gap:24px;margin-top:8px;">
+    <div class="card">
+      <div class="card-label">Option B — Claude-assisted (Recommended MVP)</div>
+      <div class="cost-row"><div><div class="cost-label">Technical co-founder salary (6 mo)</div><div class="cost-sub">$2,000–3,500/mo West Africa market rate</div></div><div class="cost-val">$12K–$21K</div></div>
+      <div class="cost-row"><div><div class="cost-label">AI coding tools</div><div class="cost-sub">Claude Pro, GitHub Copilot, Cursor IDE × 6 mo</div></div><div class="cost-val">$400–$600</div></div>
+      <div class="cost-row"><div><div class="cost-label">Cloud infrastructure (dev + staging)</div><div class="cost-sub">AWS/GCP — small instances during build</div></div><div class="cost-val">$200–$500</div></div>
+      <div class="cost-row"><div><div class="cost-label">Google Maps Platform API</div><div class="cost-sub">Traffic, geocoding, directions — beta usage</div></div><div class="cost-val">$500–$2,000</div></div>
+      <div class="cost-row"><div><div class="cost-label">Wolof ASR model hosting</div><div class="cost-sub">Hugging Face inference or custom GPU instance</div></div><div class="cost-val">$500–$1,500</div></div>
+      <div class="cost-row"><div><div class="cost-label">Africa's Talking (USSD/SMS)</div><div class="cost-sub">Setup + beta testing costs</div></div><div class="cost-val">$300–$800</div></div>
+      <div class="cost-row"><div><div class="cost-label">UI/UX design</div><div class="cost-sub">Figma, icon sets, icon-only UI design</div></div><div class="cost-val">$2K–$5K</div></div>
+      <div class="cost-row"><div><div class="cost-label">Legal & incorporation</div><div class="cost-sub">Senegal company registration, IP filing</div></div><div class="cost-val">$1K–$3K</div></div>
+      <div class="cost-row"><div><div class="cost-label">Beta user program</div><div class="cost-sub">Incentives, mobile data credits, events</div></div><div class="cost-val">$2K–$5K</div></div>
+      <div style="margin-top:16px;padding-top:16px;border-top:2px solid var(--saffron);display:flex;justify-content:space-between;">
+        <strong>TOTAL MVP (Option B)</strong>
+        <strong style="color:var(--saffron);">$19K–$39K</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Monthly running costs (post-launch)</div>
+      <div class="cost-row"><div><div class="cost-label">Cloud infrastructure</div><div class="cost-sub">Scales with users — 10K users ~$300/mo</div></div><div class="cost-val">$150–$800/mo</div></div>
+      <div class="cost-row"><div><div class="cost-label">Google Maps API</div><div class="cost-sub">Heavily used — budget carefully</div></div><div class="cost-val">$300–$1,500/mo</div></div>
+      <div class="cost-row"><div><div class="cost-label">Wolof ASR inference</div><div class="cost-sub">Per voice call processed</div></div><div class="cost-val">$100–$500/mo</div></div>
+      <div class="cost-row"><div><div class="cost-label">Push notifications</div><div class="cost-sub">Firebase FCM — free up to 1M/day</div></div><div class="cost-val">$0–$50/mo</div></div>
+      <div class="cost-row"><div><div class="cost-label">Database (PostgreSQL)</div><div class="cost-sub">Managed RDS or Supabase</div></div><div class="cost-val">$50–$200/mo</div></div>
+      <div class="cost-row"><div><div class="cost-label">USSD/SMS (Africa's Talking)</div><div class="cost-sub">~$0.005 per SMS in Senegal</div></div><div class="cost-val">$100–$400/mo</div></div>
+      <div class="cost-row"><div><div class="cost-label">AI tools (developer)</div><div class="cost-sub">Ongoing Claude + Copilot</div></div><div class="cost-val">$60–$120/mo</div></div>
+      <div style="margin-top:16px;padding-top:16px;border-top:2px solid var(--saffron);display:flex;justify-content:space-between;">
+        <strong>Monthly burn (50K users)</strong>
+        <strong style="color:var(--saffron);">~$1,500–$3,500/mo</strong>
+      </div>
+
+      <div class="highlight" style="margin-top:16px;">
+        <p><strong>The $75K seed ask covers:</strong> Full MVP build ($25–40K) + 6 months runway ($9–21K) + legal/ops ($3–5K) + beta marketing ($3–5K) = ~$40–71K total. You have buffer.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 6. TIMELINE ═══════════════════════════ -->
+<div class="section" id="timeline">
+  <div class="section-id">06 · Development Timeline</div>
+  <h2>From summit<br /><span style="color:var(--saffron)">to launch day.</span></h2>
+  <div class="divider"></div>
+
+  <div class="card-grid card-grid-2" style="gap:24px;margin-bottom:16px;">
+    <div class="card" style="background:rgba(232,147,10,.05);border-color:rgba(232,147,10,.3);">
+      <div class="card-label">Option B — Claude-assisted build</div>
+      <div style="font-size:28px;font-weight:700;color:var(--saffron);font-family:var(--font-d);">4–5 months</div>
+      <p style="font-size:13px;margin-top:4px;">To working MVP with Wolof voice, live traffic, BRT tracker, and Yango integration.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Option A — From scratch</div>
+      <div style="font-size:28px;font-weight:700;color:var(--muted);font-family:var(--font-d);">12–18 months</div>
+      <p style="font-size:13px;margin-top:4px;">To the same MVP. Same features, 3× the time, 2–3× the cost.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px;">Detailed Timeline — Option E (Hybrid — Recommended)</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">Now</div>
+          <div class="tl-phase-time">Weeks 1–2</div>
+        </div>
+        <div class="tl-content">
+          <h4>Win the Summit</h4>
+          <p>Deliver pitch deck + executive summary + speaker presentation. Secure at least one sponsor or investment commitment. This funds everything else.</p>
+          <div class="tl-tags"><span class="badge badge-saffron">Pitch deck ✓</span><span class="badge badge-saffron">Exec summary ✓</span><span class="badge badge-saffron">Speaker script ✓</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">May 2026</div>
+          <div class="tl-phase-time">Weeks 3–8</div>
+        </div>
+        <div class="tl-content">
+          <h4>No-code Prototype (pre-funding demo)</h4>
+          <p>Build a clickable FlutterFlow prototype showing the full UI flow. Simulated Wolof voice (record a response), icon-only mode, map screen, bus card. Use for follow-up sponsor meetings and user testing. Cost ~$2K–5K.</p>
+          <div class="tl-tags"><span class="badge badge-muted">FlutterFlow</span><span class="badge badge-muted">Figma</span><span class="badge badge-muted">User testing</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">Jun 2026</div>
+          <div class="tl-phase-time">Month 3</div>
+        </div>
+        <div class="tl-content">
+          <h4>Architecture & Setup</h4>
+          <p>Set up cloud infrastructure (AWS/GCP). Initialize React Native project. Set up backend (Node.js + PostgreSQL). Integrate Wolof ASR model from WAXAL/Baamtu. CETUD API partnership signed. Set up CI/CD pipeline with GitHub Actions.</p>
+          <div class="tl-tags"><span class="badge badge-green">Real build begins</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">Jul 2026</div>
+          <div class="tl-phase-time">Month 4</div>
+        </div>
+        <div class="tl-content">
+          <h4>Core Features Build</h4>
+          <p>Build: voice input (Wolof ASR) → route display. Live traffic map (Google Maps + WebSocket). BRT bus tracker (CETUD API). Yango deep-link integration. Icon-only UI mode. Phone number auth. Internal alpha testing begins.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">Aug 2026</div>
+          <div class="tl-phase-time">Month 5</div>
+        </div>
+        <div class="tl-content">
+          <h4>Polish + Beta Launch</h4>
+          <p>Fix alpha bugs. Performance optimization. Security audit. 500-person closed beta in Plateau & Médina neighborhoods. Collect feedback. Begin Heetch + Yassir API integration. Submit to Google Play Store.</p>
+          <div class="tl-tags"><span class="badge badge-green">500 beta users</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">Q4 2026</div>
+          <div class="tl-phase-time">Months 6–8</div>
+        </div>
+        <div class="tl-content">
+          <h4>Public Launch — Full Dakar</h4>
+          <p>Marketing campaign. Press release. Partnership announcements. 50,000 user target. Community crowdsourcing feature. USSD Lite launch (Africa's Talking partnership). Begin AI traffic prediction data collection.</p>
+          <div class="tl-tags"><span class="badge badge-saffron">50K users target</span><span class="badge badge-green">Public launch</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">
+          <div class="tl-phase-name">2027</div>
+          <div class="tl-phase-time">Year 2</div>
+        </div>
+        <div class="tl-content">
+          <h4>Scale + Phase 2 Features</h4>
+          <p>SafeRoute™ launch. AI traffic prediction v1. JakkalLines B2B. Government data contracts. 300K+ users. Series A fundraising. Pilot expansion to Thiès and Saint-Louis.</p>
+          <div class="tl-tags"><span class="badge badge-saffron">300K users</span><span class="badge badge-green">Series A</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 7. DATA ═══════════════════════════ -->
+<div class="section" id="data">
+  <div class="section-id">07 · Data Requirements</div>
+  <h2>What data JAKKAL<span style="color:var(--saffron)"> needs.</span></h2>
+  <div class="divider"></div>
+  <p>JAKKAL is a data-intensive app. Knowing what data you need, where it comes from, and how to handle it legally is critical — especially given Senegal's GDPR-equivalent data protection law (Loi n° 2008-12).</p>
+
+  <div class="card-grid card-grid-2" style="gap:16px;">
+    <div class="card">
+      <div class="card-label">Traffic Data</div>
+      <h3>Real-time & Historical Traffic</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;font-size:13px;">
+        <div><strong>Source:</strong> Google Maps Traffic API (real-time), community crowdsourcing (later)</div>
+        <div><strong>What you collect:</strong> Road speed, congestion levels, incident reports, flood/road closure alerts</div>
+        <div><strong>Frequency:</strong> Every 30 seconds for live map; hourly snapshots for history</div>
+        <div><strong>Storage:</strong> TimescaleDB (time-series optimized) — keep 2 years of history for AI model training</div>
+        <div><strong>Privacy:</strong> No personal data — aggregate road data only</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Transport Data</div>
+      <h3>Bus & Vehicle Data</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;font-size:13px;">
+        <div><strong>Sources:</strong> CETUD API (BRT official), Dem Dikk API, community GPS (informal buses)</div>
+        <div><strong>What you collect:</strong> Bus GPS positions, route IDs, arrival times, capacity status</div>
+        <div><strong>Frequency:</strong> Every 15 seconds per vehicle</div>
+        <div><strong>Storage:</strong> Redis (live positions), PostgreSQL (routes/schedules)</div>
+        <div><strong>Partnership needed:</strong> CETUD formal data sharing agreement — start this now</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">User Data</div>
+      <h3>User & Behavioral Data</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;font-size:13px;">
+        <div><strong>What you collect:</strong> Phone number, home/work locations, saved routes, trip history (anonymized), language preference</div>
+        <div><strong>What you NEVER collect:</strong> Full real-time GPS tracks (collect only start/end), contacts, financial data beyond payment confirmation</div>
+        <div><strong>Retention:</strong> Active data: 12 months. Anonymized aggregate: forever for AI training</div>
+        <div><strong>Legal:</strong> Explicit consent required. Must register with CDP (Commission des Données Personnelles, Senegal)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Voice Data</div>
+      <h3>Wolof Audio Data</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;font-size:13px;">
+        <div><strong>MVP approach:</strong> Use pre-built Wolof ASR model (WAXAL open-source dataset)</div>
+        <div><strong>Training data:</strong> Build your own Dakar-specific voice dataset over time — place names, slang, neighborhood names</div>
+        <div><strong>Privacy:</strong> Do NOT store voice recordings without explicit consent. Process → discard. Only store anonymized intent data</div>
+        <div><strong>Volume needed:</strong> 1,000+ hours of Wolof audio to meaningfully improve the model</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Mapping Data</div>
+      <h3>Geographic & POI Data</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;font-size:13px;">
+        <div><strong>Sources:</strong> Google Maps API, OpenStreetMap (free), custom Dakar POIs</div>
+        <div><strong>What to build custom:</strong> Informal bus stop locations (not in Google Maps), market day calendars, neighborhood boundaries, flood-prone zones</div>
+        <div><strong>SafeRoute data (Phase 2):</strong> Street lighting data, police station locations, crowd density — requires field research</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">External APIs</div>
+      <h3>Third-Party Integrations</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;font-size:13px;">
+        <div><strong>Yango API:</strong> Request access via their partner program. Provides ride availability, pricing, booking</div>
+        <div><strong>Heetch API:</strong> Similar — contact their Africa partnerships team</div>
+        <div><strong>Wave / Orange Money:</strong> For in-app payments — register as a merchant</div>
+        <div><strong>Africa's Talking:</strong> USSD + SMS gateway. Has a Senegal presence. Developer-friendly API</div>
+        <div><strong>Firebase FCM:</strong> Free push notifications up to 1M/day</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 8. SECURITY ═══════════════════════════ -->
+<div class="section" id="security">
+  <div class="section-id">08 · Security</div>
+  <h2>Keeping JAKKAL <span style="color:var(--saffron)">safe.</span></h2>
+  <div class="divider"></div>
+  <p>Security is not optional — especially when you handle location data for millions of users. A single data breach can kill a startup instantly. Build security in from day one, not as an afterthought.</p>
+
+  <div class="card-grid card-grid-2" style="gap:16px;">
+    <div class="card">
+      <div class="card-icon">🔐</div>
+      <h3>Authentication & Access</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• Phone number + OTP (no passwords — easier for users)</li>
+        <li>• JWT tokens with short expiry (1 hour access, 30 day refresh)</li>
+        <li>• Rate limiting on all API endpoints (prevent abuse)</li>
+        <li>• Never store raw OTP codes — hash immediately</li>
+        <li>• 2FA for admin/operator dashboards</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h3>Data in Transit</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• HTTPS everywhere — no HTTP at all</li>
+        <li>• Certificate pinning in the mobile app</li>
+        <li>• TLS 1.3 minimum</li>
+        <li>• WebSocket connections also over WSS (secure)</li>
+        <li>• VPN for internal service communication</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗄️</div>
+      <h3>Data at Rest</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• Encrypt sensitive fields in database (phone numbers, location history)</li>
+        <li>• AWS KMS or GCP KMS for key management</li>
+        <li>• Automated daily database backups, encrypted</li>
+        <li>• Separate staging and production databases</li>
+        <li>• Never put real user data in development environments</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <h3>Legal Compliance (Senegal)</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• Register with CDP (Commission des Données Personnelles)</li>
+        <li>• Privacy policy in Wolof AND French</li>
+        <li>• Explicit opt-in consent for location data</li>
+        <li>• Right to deletion — user can delete account + all data</li>
+        <li>• Data must be stored in Senegal or ECOWAS region where possible</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛡️</div>
+      <h3>App Security</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• Code obfuscation on Android APK</li>
+        <li>• No hardcoded API keys in mobile app code</li>
+        <li>• Runtime Application Self-Protection (RASP)</li>
+        <li>• Regular dependency audits (npm audit, snyk)</li>
+        <li>• Google Play Protect integration</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <h3>Monitoring & Incident Response</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• Sentry for error tracking (free tier available)</li>
+        <li>• Datadog or CloudWatch for infrastructure alerts</li>
+        <li>• Set up alerts for unusual API call volumes (bot detection)</li>
+        <li>• Have an incident response plan before launch</li>
+        <li>• 72-hour breach notification rule (under Senegal law)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 9. PERFORMANCE ═══════════════════════════ -->
+<div class="section" id="performance">
+  <div class="section-id">09 · Performance & Reliability</div>
+  <h2>JAKKAL must work<br /><span style="color:var(--saffron)">in Dakar conditions.</span></h2>
+  <div class="divider"></div>
+  <p>Dakar has highly variable internet connectivity. Some users are on 4G LTE; many are on 2G/3G or intermittent WiFi. Your app must work under these conditions — otherwise you're excluding the people you're trying to serve.</p>
+
+  <div class="card-grid card-grid-2" style="gap:16px;margin-top:8px;">
+    <div class="card">
+      <div class="card-icon">📶</div>
+      <h3>Low-connectivity Design</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• <strong>Offline mode:</strong> Cache last-known traffic + route. App still works without internet for known routes</li>
+        <li>• <strong>Aggressive compression:</strong> All API responses gzipped. Images WebP format only</li>
+        <li>• <strong>Lazy loading:</strong> Only load map tiles for the visible area</li>
+        <li>• <strong>App size:</strong> Target under 20MB APK download (many users on limited data plans)</li>
+        <li>• <strong>Progressive enhancement:</strong> Basic route info loads first; voice AI loads if connection allows</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>Speed Targets</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <div class="cost-row" style="border-color:var(--rule);">
+          <div class="cost-label">Voice input → route shown</div>
+          <div class="cost-val">under 2 sec</div>
+        </div>
+        <div class="cost-row" style="border-color:var(--rule);">
+          <div class="cost-label">Map load time</div>
+          <div class="cost-val">under 3 sec on 3G</div>
+        </div>
+        <div class="cost-row" style="border-color:var(--rule);">
+          <div class="cost-label">Bus arrival update</div>
+          <div class="cost-val">every 30 sec</div>
+        </div>
+        <div class="cost-row" style="border-color:var(--rule);">
+          <div class="cost-label">API response time</div>
+          <div class="cost-val">under 200ms (p95)</div>
+        </div>
+        <div class="cost-row">
+          <div class="cost-label">App crash rate target</div>
+          <div class="cost-val">under 0.5%</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <h3>Scalability Plan</h3>
+      <div style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+        <div><strong>0–10K users:</strong> Single server, PostgreSQL, basic Redis. ~$150/mo</div>
+        <div><strong>10K–100K users:</strong> Auto-scaling groups, read replicas, CDN for static assets. ~$500–1,500/mo</div>
+        <div><strong>100K–1M users:</strong> Microservices separation, database sharding, multi-region. ~$3,000–8,000/mo</div>
+        <div style="margin-top:4px;"><strong>Key bottleneck:</strong> The Wolof ASR service is CPU-intensive. Dedicate a GPU instance for it early. Cost ~$200–400/mo.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔁</div>
+      <h3>Reliability & Uptime</h3>
+      <ul style="font-size:13px;color:rgba(26,15,10,.7);display:flex;flex-direction:column;gap:6px;list-style:none;margin-top:8px;">
+        <li>• <strong>Target:</strong> 99.5% uptime (allows ~44 hours downtime/year)</li>
+        <li>• Multi-availability-zone deployment on AWS</li>
+        <li>• Database replication + automatic failover</li>
+        <li>• Health checks every 30 seconds</li>
+        <li>• Graceful degradation: if ASR is down, fall back to French text input</li>
+        <li>• Status page (statuspage.io) — be transparent with users</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 10. RECOMMENDATION ═══════════════════════════ -->
+<div class="section" id="recommendation">
+  <div class="section-id">10 · Final Recommendation</div>
+  <h2>Your <span style="color:var(--saffron)">action plan.</span></h2>
+  <div class="divider"></div>
+
+  <div class="card" style="border-left:4px solid var(--saffron);background:rgba(232,147,10,.04);margin-bottom:20px;">
+    <div style="font-family:var(--font-d);font-size:22px;font-weight:700;font-style:italic;color:var(--deep);margin-bottom:12px;">The recommendation in one sentence:</div>
+    <p style="font-size:15px;max-width:100%;color:var(--deep);">Build a <strong>no-code FlutterFlow prototype</strong> now (4–6 weeks, ~$3K) to win your sponsor at the Women in Tech Summit, then use that funding to do a <strong>Claude-assisted full build</strong> (3–5 months, ~$25–40K) of the real JAKKAL app.</p>
+  </div>
+
+  <div class="card-grid card-grid-3" style="gap:14px;margin-bottom:20px;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">📅</div>
+      <h3>Next 2 weeks</h3>
+      <p>Present at Women in Tech Summit. Win at least one $20K+ sponsor commitment.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">🔧</div>
+      <h3>Months 1–2</h3>
+      <p>Build no-code prototype for follow-up demos. Register company. Open CETUD API talks. Sign up for Africa's Talking developer account.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">🚀</div>
+      <h3>Months 3–8</h3>
+      <p>Real build begins. Claude-assisted React Native + Node.js + Wolof ASR. Beta launch Q3 2026. Public launch Q4 2026.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="margin-bottom:14px;">Things to do right now (this week)</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">1️⃣</span>
+        <div><strong>Register on Africa's Talking</strong> (africastalking.com) — free developer account. Test their USSD + SMS API. This is your Lite mode infrastructure.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">2️⃣</span>
+        <div><strong>Download the Baamtu Datamation Wolof ASR model</strong> from Hugging Face. Have your technical co-founder run a test transcription to verify it works on Dakar place names.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">3️⃣</span>
+        <div><strong>Email CETUD</strong> (Conseil Exécutif des Transports Urbains de Dakar) about their BRT data API. The World Bank $100M project means they're actively looking for tech partners right now.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">4️⃣</span>
+        <div><strong>Create a GitHub repository</strong> for JAKKAL today. Even if you're not coding yet — it shows investors and partners that you're serious and organized.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="font-size:16px;flex-shrink:0;">5️⃣</span>
+        <div><strong>Subscribe to Claude Pro</strong> ($20/mo). Start using it now to help with architecture decisions, drafting partnership emails, writing the privacy policy, and planning sprints.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>JAKKAL — Technical Blueprint · April 2026</span>
+  <span>Confidential · Co-Founders only</span>
+  <span>jakkal.sn · hello@jakkal.sn</span>
+</footer>
+
+</div>
+</body>
+</html>
