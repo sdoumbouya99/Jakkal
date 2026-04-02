@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAKKAL — Investor & Sponsor Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #E8930A;
+    --earth: #C4622D;
+    --deep: #1A0F0A;
+    --sand: #F5E6C8;
+    --muted: #8B7355;
+    --forest: #2D4A2D;
+    --accent: #FF6B35;
+    --white: #FDF8F0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--sand);
+    font-family: 'Sora', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* SLIDE LAYOUT */
+  .slide {
+    min-height: 100vh;
+    width: 100%;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide + .slide {
+    border-top: 1px solid rgba(232,147,10,0.2);
+  }
+
+  /* BACKGROUNDS */
+  .bg-dark { background: var(--deep); }
+  .bg-sand { background: var(--sand); color: var(--deep); }
+  .bg-earth { background: var(--earth); color: var(--white); }
+  .bg-forest { background: var(--forest); color: var(--sand); }
+  .bg-saffron { background: var(--saffron); color: var(--deep); }
+
+  /* DECORATIVE */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+    z-index: 9999;
+  }
+
+  .circle-deco {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(232,147,10,0.15);
+    pointer-events: none;
+  }
+
+  /* TYPOGRAPHY */
+  .display {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--saffron);
+    color: var(--deep);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  .tag-outline {
+    display: inline-block;
+    border: 1px solid var(--saffron);
+    color: var(--saffron);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(52px,10vw,110px); font-weight: 900; line-height: 0.9; }
+  h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px,6vw,64px); font-weight: 700; line-height: 1.1; margin-bottom: 16px; }
+  h3 { font-family: 'Sora', sans-serif; font-size: clamp(18px,3vw,26px); font-weight: 600; margin-bottom: 10px; }
+
+  p { font-size: 15px; line-height: 1.8; opacity: 0.85; max-width: 680px; }
+  p.large { font-size: 18px; line-height: 1.7; }
+
+  .gold { color: var(--saffron); }
+  .accent-text { color: var(--accent); }
+
+  /* HERO SLIDE */
+  .hero-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(80px,18vw,200px);
+    font-weight: 900;
+    color: var(--saffron);
+    line-height: 0.85;
+    letter-spacing: -4px;
+  }
+
+  .hero-tagline {
+    font-size: clamp(12px, 2vw, 16px);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 20px;
+    font-weight: 300;
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 2.5vw, 20px);
+    font-weight: 300;
+    color: var(--sand);
+    margin-top: 12px;
+    opacity: 0.7;
+  }
+
+  /* STAT BLOCKS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2px;
+    margin-top: 40px;
+  }
+
+  .stat-block {
+    background: rgba(232,147,10,0.08);
+    border: 1px solid rgba(232,147,10,0.2);
+    padding: 28px 24px;
+  }
+
+  .stat-block .number {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    color: var(--saffron);
+    line-height: 1;
+  }
+
+  .stat-block .label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* FEATURE CARDS */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,147,10,0.2);
+    border-radius: 8px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    background: rgba(232,147,10,0.08);
+    border-color: var(--saffron);
+    transform: translateY(-3px);
+  }
+
+  .feature-card .icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--sand);
+  }
+
+  .feature-card p {
+    font-size: 13px;
+    opacity: 0.65;
+    line-height: 1.6;
+  }
+
+  .feature-card .badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--saffron);
+    color: var(--deep);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  /* COMPARISON TABLE */
+  .comparison-wrap {
+    margin-top: 32px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 600px;
+  }
+
+  thead tr {
+    background: var(--saffron);
+    color: var(--deep);
+  }
+
+  thead th {
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(232,147,10,0.12);
+  }
+
+  tbody tr:nth-child(even) { background: rgba(232,147,10,0.04); }
+
+  tbody td {
+    padding: 14px 18px;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .check { color: #4CAF50; font-weight: 700; }
+  .cross { color: #f44336; }
+  .partial { color: var(--saffron); }
+
+  /* ROADMAP */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    margin-top: 36px;
+    position: relative;
+  }
+
+  .phase {
+    padding: 28px 24px;
+    border-left: 3px solid rgba(232,147,10,0.2);
+    position: relative;
+  }
+
+  .phase.active { border-left-color: var(--saffron); }
+
+  .phase-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(232,147,10,0.15);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .phase.active .phase-num { color: var(--saffron); }
+
+  .phase-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .phase h3 { font-size: 15px; margin-bottom: 10px; }
+
+  .phase ul {
+    list-style: none;
+    font-size: 12px;
+    opacity: 0.7;
+    line-height: 2;
+  }
+
+  .phase ul li::before { content: "→ "; color: var(--saffron); }
+
+  /* ASK SECTION */
+  .ask-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    margin-top: 32px;
+  }
+
+  .ask-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,147,10,0.3);
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .ask-item .ask-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--saffron);
+    line-height: 1;
+  }
+
+  .ask-item .ask-desc {
+    font-size: 12px;
+    margin-top: 8px;
+    opacity: 0.65;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* TEAM */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .team-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,147,10,0.2);
+    border-radius: 8px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .team-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--saffron), var(--earth));
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--deep);
+  }
+
+  .team-name { font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+  .team-role { font-size: 12px; color: var(--saffron); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .team-bio { font-size: 12px; opacity: 0.6; line-height: 1.6; }
+
+  /* QUOTE / HIGHLIGHT */
+  .big-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 40px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.35;
+    color: var(--sand);
+    border-left: 4px solid var(--saffron);
+    padding-left: 28px;
+    margin: 32px 0;
+    max-width: 800px;
+  }
+
+  /* LOGO MARK */
+  .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .logo-mark .wordmark {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--saffron);
+    letter-spacing: 2px;
+  }
+
+  .logo-mark .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--saffron);
+    border-radius: 50%;
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: var(--saffron);
+    margin: 20px 0;
+  }
+
+  /* FOOTER NAV */
+  .slide-footer {
+    position: absolute;
+    bottom: 28px;
+    right: 40px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.3;
+  }
+
+  /* TWO COLUMN */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media(max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    .slide { padding: 40px 24px; }
+  }
+
+  /* ANIMATION */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide > * {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .slide > *:nth-child(2) { animation-delay: 0.1s; }
+  .slide > *:nth-child(3) { animation-delay: 0.2s; }
+  .slide > *:nth-child(4) { animation-delay: 0.3s; }
+  .slide > *:nth-child(5) { animation-delay: 0.4s; }
+
+  /* SECTION LABEL */
+  .section-num {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--saffron);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  /* ICON STRIPE */
+  .icon-stripe {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+    align-items: center;
+  }
+
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  .icon-item .emoji { font-size: 28px; }
+
+  /* CTA BUTTON */
+  .cta-btn {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 16px 40px;
+    background: var(--saffron);
+    color: var(--deep);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cta-btn:hover { background: var(--accent); transform: translateY(-2px); }
+
+  /* HORIZONTAL LINE */
+  hr.thin {
+    border: none;
+    border-top: 1px solid rgba(232,147,10,0.2);
+    margin: 28px 0;
+  }
+
+  /* WAVE SEPARATOR */
+  .wave-sep {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--saffron), transparent);
+    margin: 0;
+  }
+
+  /* PROBLEM VISUAL */
+  .problem-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .problem-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .problem-bar .bar-label {
+    font-size: 12px;
+    opacity: 0.7;
+    min-width: 180px;
+    text-align: right;
+  }
+
+  .problem-bar .bar-fill {
+    height: 28px;
+    background: linear-gradient(90deg, var(--saffron), var(--accent));
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--deep);
+    min-width: 60px;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.3;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* COLOR SWATCH */
+  .swatch-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .swatch {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* APP MOCKUP */
+  .mockup-phone {
+    width: 220px;
+    height: 400px;
+    background: #111;
+    border-radius: 32px;
+    border: 6px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+
+  .mockup-screen {
+    background: linear-gradient(160deg, #1a0f0a 0%, #2d1a0e 100%);
+    width: 100%;
+    height: 100%;
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mockup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .mockup-app-name {
+    color: var(--saffron);
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 22px;
+  }
+
+  .mockup-mic {
+    width: 36px;
+    height: 36px;
+    background: var(--saffron);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .mockup-map-area {
+    background: rgba(45,74,45,0.4);
+    border-radius: 12px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 1px solid rgba(45,74,45,0.6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .map-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--saffron);
+  }
+
+  .map-dot.d1 { top: 30px; left: 40px; }
+  .map-dot.d2 { top: 60px; left: 90px; }
+  .map-dot.d3 { bottom: 25px; right: 50px; }
+
+  .map-line {
+    position: absolute;
+    height: 2px;
+    background: rgba(232,147,10,0.5);
+    transform-origin: left center;
+  }
+
+  .mockup-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 10px;
+    line-height: 1.5;
+    border: 1px solid rgba(232,147,10,0.2);
+  }
+
+  .mockup-card .card-title {
+    color: var(--saffron);
+    font-weight: 700;
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .mockup-btn {
+    background: var(--saffron);
+    color: var(--deep);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .traffic-indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 10px;
+  }
+
+  .traffic-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .traffic-dot.red { background: #ef4444; }
+  .traffic-dot.yellow { background: #f59e0b; }
+  .traffic-dot.green { background: #22c55e; }
+
+  .voice-wave {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    margin-top: 4px;
+  }
+
+  .voice-bar {
+    width: 3px;
+    background: var(--saffron);
+    border-radius: 2px;
+    animation: voiceAnim 0.8s ease-in-out infinite alternate;
+  }
+
+  .voice-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .voice-bar:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+  .voice-bar:nth-child(3) { height: 18px; animation-delay: 0.2s; }
+  .voice-bar:nth-child(4) { height: 10px; animation-delay: 0.3s; }
+  .voice-bar:nth-child(5) { height: 16px; animation-delay: 0.15s; }
+  .voice-bar:nth-child(6) { height: 8px; animation-delay: 0.05s; }
+
+  @keyframes voiceAnim {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(0.3); }
+  }
+
+  /* SLIDE NUMBER */
+  .slide-num {
+    position: absolute;
+    top: 24px;
+    right: 40px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.2;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* INTRO ACCENT LINE */
+  .accent-line {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--saffron), var(--accent), transparent);
+    margin-bottom: 60px;
+  }
+
+  /* BOLD TEXT */
+  strong { color: var(--saffron); font-weight: 600; }
+
+  /* PRINT */
+  @media print {
+    .slide { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 1: COVER -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark" style="padding-top:80px;">
+  <div class="accent-line"></div>
+  <div class="circle-deco" style="width:600px;height:600px;right:-200px;top:-200px;"></div>
+  <div class="circle-deco" style="width:300px;height:300px;left:-100px;bottom:-100px;"></div>
+
+  <div class="tag">Women in Tech Summit · April 2026 · Dakar, Senegal</div>
+  <div class="hero-logo">JAKKAL</div>
+  <div class="hero-tagline">Wolof for "the road"</div>
+  <div class="hero-sub" style="max-width:500px; margin-top:24px;">
+    Africa's first AI-powered, voice-first urban mobility app<br>built for the people of Senegal — in Wolof.
+  </div>
+
+  <div style="margin-top:48px; display:flex; gap:40px; flex-wrap:wrap; align-items:center;">
+    <div>
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:0.4;margin-bottom:6px;">Co-Founders</div>
+      <div style="font-size:15px; font-weight:600;">Two Women · One Mission · Zero Compromise</div>
+    </div>
+    <div style="width:1px;height:40px;background:rgba(232,147,10,0.3);"></div>
+    <div>
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:0.4;margin-bottom:6px;">Seeking</div>
+      <div style="font-size:15px; font-weight:600; color:var(--saffron);">Strategic Sponsor & Seed Investment</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">↓ scroll</div>
+  <div class="slide-num">01</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 2: THE STORY -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">02</div>
+  <div class="section-num">01 · The Story</div>
+  <h2>Every morning,<br><span class="gold">Dakar bleeds time.</span></h2>
+  <div class="divider"></div>
+
+  <div class="two-col" style="margin-top:24px;">
+    <div>
+      <p class="large">
+        Dakar is a city of <strong>4 million people</strong> squeezed onto a 550 km² peninsula. Twice a day, it grinds to a halt. Commuters spend hours in gridlock, miss jobs, lose income — and the country loses <strong>$1.4 billion per year</strong> to traffic congestion alone.
+      </p>
+      <br>
+      <p>
+        The apps that could help? They're in French. They assume literacy. They assume smartphones. They don't speak Wolof. They weren't built for the 44% of Dakarois who walk because nothing else makes sense — or the millions more who navigate the city by instinct, community knowledge, and word of mouth.
+      </p>
+      <br>
+      <p>
+        <strong>JAKKAL</strong> was born from a simple, urgent question: <em>What if the city could talk to you — in your language?</em>
+      </p>
+    </div>
+
+    <div>
+      <div class="problem-visual">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-bottom:8px;">The cost of doing nothing</div>
+        <div class="problem-bar">
+          <div class="bar-label">GDP lost to congestion</div>
+          <div class="bar-fill" style="width:85%;">$1.4B / yr</div>
+        </div>
+        <div class="problem-bar">
+          <div class="bar-label">Apps in Wolof</div>
+          <div class="bar-fill" style="width:5%; background: #ef4444;">0</div>
+        </div>
+        <div class="problem-bar">
+          <div class="bar-label">Informal transport share</div>
+          <div class="bar-fill" style="width:80%;">~80%</div>
+        </div>
+        <div class="problem-bar">
+          <div class="bar-label">Smartphone penetration</div>
+          <div class="bar-fill" style="width:46%;">~50%</div>
+        </div>
+        <div class="problem-bar">
+          <div class="bar-label">Pop. relying on walking</div>
+          <div class="bar-fill" style="width:44%; background: linear-gradient(90deg, var(--earth), var(--accent));">44%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 3: THE MARKET GAP -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">03</div>
+  <div class="section-num">02 · Competitive Landscape</div>
+  <h2>What exists.<br><span class="gold">What's missing.</span></h2>
+  <div class="divider"></div>
+
+  <div class="comparison-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Google Maps</th>
+          <th>Yango / Heetch</th>
+          <th>Weego</th>
+          <th>Dem Dikk App</th>
+          <th style="background:var(--earth);color:var(--white);">JAKKAL ✦</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wolof language support</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ Native</span></td>
+        </tr>
+        <tr>
+          <td>Voice-first interface (no reading needed)</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ Core feature</span></td>
+        </tr>
+        <tr>
+          <td>Real-time traffic alerts</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ AI-powered</span></td>
+        </tr>
+        <tr>
+          <td>Informal bus (car rapide) tracking</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">Limited</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ Community + GPS</span></td>
+        </tr>
+        <tr>
+          <td>Cab / ride-hail integration</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">Via partner</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ Multi-provider</span></td>
+        </tr>
+        <tr>
+          <td>BRT / TER train integration</td>
+          <td><span class="partial">Basic</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">Bus only</span></td>
+          <td><span class="check">✓ Full multimodal</span></td>
+        </tr>
+        <tr>
+          <td>Accessibility for illiterate users</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ Icon + voice UI</span></td>
+        </tr>
+        <tr>
+          <td>Works on low-end / feature phones</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ Lite mode</span></td>
+        </tr>
+        <tr>
+          <td>AI traffic prediction</td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ ML model</span></td>
+        </tr>
+        <tr>
+          <td>Women safety features</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ SafeRoute™</span></td>
+        </tr>
+        <tr>
+          <td>Built in & for Senegal</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">Started here</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓ 100% local</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="big-quote" style="margin-top:32px; font-size:clamp(16px,3vw,24px);">
+    "WeeGo started in Dakar — then left for Morocco. We are staying."
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 4: THE SOLUTION -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">04</div>
+  <div class="section-num">03 · The Solution</div>
+  <h2>Meet <span class="gold">JAKKAL.</span></h2>
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <p style="margin-bottom:24px;">
+        JAKKAL is a <strong>voice-first, AI-powered urban mobility app</strong> for Dakar and Senegal. It tells you how bad traffic is, which bus to take, when it's coming, how to call a cab — and it does all of this <strong>in Wolof</strong>, with no reading required.
+      </p>
+
+      <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="feature-card">
+          <span class="icon">🎙️</span>
+          <h3>Wolof Voice AI</h3>
+          <p>Speak your destination in Wolof. JAKKAL understands and responds — no typing, no French.</p>
+          <div class="badge">Core</div>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🗺️</span>
+          <h3>Live Traffic Map</h3>
+          <p>Real-time congestion heatmap with color-coded severity. One glance tells the whole story.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🚌</span>
+          <h3>Bus Tracker</h3>
+          <p>Track BRT, Dem Dikk, and informal minibuses. Know exactly when your bus arrives.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🚕</span>
+          <h3>Ride-Hail Hub</h3>
+          <p>Compare Yango, Heetch & Yassir prices in one tap. Book without switching apps.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🧠</span>
+          <h3>AI Route Planner</h3>
+          <p>Predicts traffic 30–60 min ahead. Suggests fastest, cheapest, or safest route.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🛡️</span>
+          <h3>SafeRoute™</h3>
+          <p>Recommends well-lit, active routes for women traveling alone. SOS one-tap alert.</p>
+          <div class="badge" style="background:var(--earth);">New</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHONE MOCKUP -->
+    <div style="display:flex;justify-content:center;align-items:flex-start;padding-top:16px;">
+      <div class="mockup-phone">
+        <div class="mockup-screen">
+          <div class="mockup-header">
+            <div class="mockup-app-name">JAKKAL</div>
+            <div class="mockup-mic">🎙</div>
+          </div>
+
+          <div style="font-size:9px;opacity:0.5;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Dakar · Plateau → Parcelles</div>
+
+          <div class="mockup-map-area">
+            <div class="map-dot d1"></div>
+            <div class="map-dot d2" style="background:#ef4444;"></div>
+            <div class="map-dot d3"></div>
+            <div style="font-size:32px;z-index:2;">🗺️</div>
+          </div>
+
+          <div class="traffic-indicator" style="margin-top:4px;">
+            <div class="traffic-dot red"></div>
+            <div style="font-size:9px;opacity:0.7;margin-right:8px;">Route Corniche — LOURD</div>
+            <div class="traffic-dot green"></div>
+            <div style="font-size:9px;opacity:0.7;">Autoroute — BON</div>
+          </div>
+
+          <div class="mockup-card">
+            <div class="card-title">🚌 Bus BRT-01</div>
+            <div style="opacity:0.7;">Arrive dans <strong style="color:var(--saffron);">4 min</strong> · Station Liberté VI</div>
+          </div>
+
+          <div class="mockup-card">
+            <div class="card-title">🚕 Yango</div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="opacity:0.7;">~12 min d'attente</span>
+              <span style="color:var(--saffron);font-weight:700;">1,500 CFA</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(232,147,10,0.1);border:1px solid rgba(232,147,10,0.3);border-radius:10px;padding:10px;text-align:center;">
+            <div class="voice-wave">
+              <div class="voice-bar"></div>
+              <div class="voice-bar"></div>
+              <div class="voice-bar"></div>
+              <div class="voice-bar"></div>
+              <div class="voice-bar"></div>
+              <div class="voice-bar"></div>
+            </div>
+            <div style="font-size:9px;opacity:0.6;margin-top:4px;letter-spacing:1px;">WOLOF AKTIF…</div>
+          </div>
+
+          <div class="mockup-btn">SafeRoute — Xam ci kàddu (understand)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 5: AI + ACCESSIBILITY -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">05</div>
+  <div class="section-num">04 · AI & Accessibility</div>
+  <h2>Built for <span class="gold">everyone.</span><br>Not just the connected few.</h2>
+  <div class="divider"></div>
+
+  <div class="two-col" style="margin-top:16px;">
+    <div>
+      <p>
+        <strong>46% of Senegalese adults are not literate in French.</strong> Existing apps exclude them entirely. JAKKAL is built from the ground up with a "voice-first, text-second" philosophy.
+      </p>
+
+      <br>
+
+      <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;background:rgba(232,147,10,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎙️</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Wolof ASR Engine</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Powered by open-source Wolof speech recognition (Baamtu Datamation + Google WAXAL datasets). Users speak naturally — the app understands accents, slang, and place names.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;background:rgba(232,147,10,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🖼️</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Icon-Only Navigation Mode</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">A full icon-driven UI with no text required. Tap a bus emoji to find buses. Tap a car to find a cab. Universally understood visual language.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;background:rgba(232,147,10,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📱</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px;">JAKKAL Lite (USSD + SMS)</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">For users without smartphones: text *707# to get a Wolof SMS with traffic status and next bus time. Works on any phone, any carrier.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;background:rgba(232,147,10,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🧠</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px;">AI Traffic Prediction</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Machine learning model trained on Dakar traffic patterns, prayer times, market days, and school hours. Predicts congestion before it happens.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;background:rgba(232,147,10,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🌍</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Community Crowdsource Layer</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Users report accidents, roadblocks, floods, broken traffic lights. Each report earns mobile data credits — turning commuters into contributors.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="background:rgba(232,147,10,0.06);border:1px solid rgba(232,147,10,0.2);border-radius:12px;padding:28px;">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:20px;">Global Benchmarks We're Inspired By</div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🇧🇷 Moovit (Brazil/Global)</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Multimodal public transit. 1B+ trips planned. We adapt its multimodal logic for informal Dakar transport.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🇮🇱 Waze (Crowdsourced Traffic)</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Community-reported incidents. We bring this model to Dakar with Wolof voice alerts.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🇮🇳 Ola / Namma Yatri (India)</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Ride-hail built for informal markets, vernacular languages, and low connectivity.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🇰🇪 Little Cab (Kenya)</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Africa-first ride-hail that works offline and integrates M-PESA. Model for our Wave mobile payment integration.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">🇸🇳 Wave (Senegal — proof of concept)</div>
+            <div style="font-size:12px;opacity:0.65;line-height:1.6;">Took 50% of fintech market in 3 years in Senegal by being <em>truly local</em>. We follow the same playbook for mobility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 6: BRAND IDENTITY -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">06</div>
+  <div class="section-num">05 · Brand Identity</div>
+  <h2>A name rooted<br><span class="gold">in the land.</span></h2>
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <div style="margin-bottom:32px;">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:12px;">The Name</div>
+        <div style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--saffron);">JAKKAL</div>
+        <div style="font-size:13px;opacity:0.65;margin-top:8px;line-height:1.8;">
+          <strong>Jakkal</strong> means "the road" or "the path" in Wolof.<br>
+          It conveys journey, direction, and forward movement.<br>
+          It's pronounceable in every Senegalese language.<br>
+          It's ownable, memorable, and unmistakably local.
+        </div>
+      </div>
+
+      <div style="margin-bottom:32px;">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:12px;">The Tagline</div>
+        <div style="font-size:20px;font-style:italic;font-family:'Playfair Display',serif;">"Xam sa jakkal." — Know your road.</div>
+        <div style="font-size:12px;opacity:0.5;margin-top:6px;">In Wolof, then French: "Connaître son chemin."</div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:12px;">The Logo Concept</div>
+        <div style="font-size:13px;opacity:0.65;line-height:1.8;">
+          A stylized letter <strong>J</strong> that doubles as a road curving forward on a map — with a location pin forming the dot. Thick, confident, golden. Works at any size from app icon to billboard.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div>
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:16px;">Color Palette</div>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#E8930A; color:#1A0F0A;">
+            <span>#E8930A</span>
+            <span style="font-size:9px;opacity:0.7;">Saffron Gold</span>
+          </div>
+          <div class="swatch" style="background:#C4622D; color:#FDF8F0;">
+            <span style="color:#FDF8F0;">#C4622D</span>
+            <span style="font-size:9px;opacity:0.7;color:#FDF8F0;">Terracotta</span>
+          </div>
+          <div class="swatch" style="background:#2D4A2D; color:#F5E6C8;">
+            <span style="color:#F5E6C8;">#2D4A2D</span>
+            <span style="font-size:9px;opacity:0.7;color:#F5E6C8;">Forest</span>
+          </div>
+          <div class="swatch" style="background:#1A0F0A; color:#E8930A; border:1px solid rgba(232,147,10,0.3);">
+            <span>#1A0F0A</span>
+            <span style="font-size:9px;opacity:0.7;">Deep Earth</span>
+          </div>
+          <div class="swatch" style="background:#F5E6C8; color:#1A0F0A;">
+            <span>#F5E6C8</span>
+            <span style="font-size:9px;opacity:0.7;">Sand White</span>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <div>
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:12px;">Visual Language</div>
+        <div style="font-size:13px;opacity:0.65;line-height:1.9;">
+          ✦ Warm earthy tones inspired by Dakar's clay architecture and baobab trees<br>
+          ✦ Saffron gold for trust, authority, and vibrancy<br>
+          ✦ Bold, legible icons — visible in bright sunlight on a moving bus<br>
+          ✦ No clutter. One action per screen. Designed for one-thumb use<br>
+          ✦ Accessible contrast ratios (WCAG AA) throughout
+        </div>
+      </div>
+
+      <br>
+
+      <div>
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:12px;">Typography</div>
+        <div style="font-size:22px;font-family:'Playfair Display',serif;font-weight:900;margin-bottom:4px;">Playfair Display — Headlines</div>
+        <div style="font-size:14px;font-family:'Sora',sans-serif;opacity:0.65;">Sora — UI & Body text · Clean, modern, African-neutral</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 7: BUSINESS MODEL -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">07</div>
+  <div class="section-num">06 · Business Model</div>
+  <h2>How <span class="gold">JAKKAL</span><br>makes money.</h2>
+  <div class="divider"></div>
+
+  <div class="feature-grid" style="margin-top:28px;">
+    <div class="feature-card">
+      <span class="icon">💰</span>
+      <h3>Ride-Hail Commission</h3>
+      <p>8–12% commission on every Yango/Heetch booking made through JAKKAL. Grows with ride volume.</p>
+      <div class="badge">Yr 1</div>
+    </div>
+    <div class="feature-card">
+      <span class="icon">📊</span>
+      <h3>B2G Traffic Data</h3>
+      <p>Sell anonymized, AI-aggregated traffic flow data to CETUD, World Bank, and city planners. GDPR-compliant.</p>
+      <div class="badge">Yr 2</div>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🏢</span>
+      <h3>B2B Shuttle (JakkalLines)</h3>
+      <p>Corporate employee shuttle optimization — reduce lateness 30%, per Weego's proven model. SaaS subscription.</p>
+      <div class="badge">Yr 2</div>
+    </div>
+    <div class="feature-card">
+      <span class="icon">⭐</span>
+      <h3>JAKKAL Premium</h3>
+      <p>500 CFA/month (~$0.80) for ad-free experience, priority routing, accident alerts, and early bus alerts.</p>
+      <div class="badge">Yr 1</div>
+    </div>
+    <div class="feature-card">
+      <span class="icon">📱</span>
+      <h3>In-App Advertising</h3>
+      <p>Hyper-local ads for nearby shops, petrol stations, restaurants — only shown to users who opt in. Never intrusive.</p>
+      <div class="badge">Yr 1</div>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🌍</span>
+      <h3>Pan-Africa Licensing</h3>
+      <p>White-label JAKKAL's Wolof AI + multimodal stack for Abidjan, Bamako, Conakry — Francophone Africa's 80M+ urban residents.</p>
+      <div class="badge">Yr 3</div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;background:rgba(232,147,10,0.06);border:1px solid rgba(232,147,10,0.2);padding:24px;border-radius:8px;max-width:600px;">
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:12px;">Revenue Projections</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <div style="text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--saffron);">Yr 1</div>
+        <div style="font-size:13px;opacity:0.7;margin-top:4px;">Pilot, 50K users<br>$80K revenue</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--saffron);">Yr 2</div>
+        <div style="font-size:13px;opacity:0.7;margin-top:4px;">Scale, 300K users<br>$600K revenue</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--saffron);">Yr 3</div>
+        <div style="font-size:13px;opacity:0.7;margin-top:4px;">Expansion, 1M users<br>$2.5M revenue</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 8: ROADMAP -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">08</div>
+  <div class="section-num">07 · Roadmap</div>
+  <h2>From summit<br><span class="gold">to streets.</span></h2>
+  <div class="divider"></div>
+
+  <div class="roadmap">
+    <div class="phase active">
+      <div class="phase-num">01</div>
+      <div class="phase-label">Now → Q2 2026</div>
+      <h3>Validate & Build</h3>
+      <ul>
+        <li>Women in Tech Summit pitch</li>
+        <li>Secure seed sponsor</li>
+        <li>MVP development begins</li>
+        <li>Wolof ASR model integration</li>
+        <li>CETUD partnership talks</li>
+        <li>Driver & community onboarding</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-num">02</div>
+      <div class="phase-label">Q3 2026</div>
+      <h3>Private Beta</h3>
+      <ul>
+        <li>Launch in Plateau & Médina</li>
+        <li>500 beta users</li>
+        <li>Yango integration live</li>
+        <li>Community reporting active</li>
+        <li>BRT + Dem Dikk live data</li>
+        <li>Iterate on Wolof UX</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-num">03</div>
+      <div class="phase-label">Q4 2026</div>
+      <h3>Public Launch</h3>
+      <ul>
+        <li>Full Dakar coverage</li>
+        <li>50,000 users target</li>
+        <li>AI traffic model v1</li>
+        <li>USSD Lite launch</li>
+        <li>Press & partnerships</li>
+        <li>Series A prep</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-num">04</div>
+      <div class="phase-label">2027</div>
+      <h3>Scale & Expand</h3>
+      <ul>
+        <li>300K+ active users</li>
+        <li>JakkalLines B2B launch</li>
+        <li>Gov data contracts</li>
+        <li>TER train integration</li>
+        <li>Pilot: Thiès & Saint-Louis</li>
+        <li>Abidjan partnership</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 9: THE TEAM -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">09</div>
+  <div class="section-num">08 · The Team</div>
+  <h2>Two women.<br><span class="gold">Built for Senegal.</span></h2>
+  <div class="divider"></div>
+
+  <div class="team-grid" style="max-width:700px;">
+    <div class="team-card">
+      <div class="team-avatar">C1</div>
+      <div class="team-name">Co-Founder 01</div>
+      <div class="team-role">CEO · Product Vision</div>
+      <div class="team-bio">
+        Community organizer, ERG leader, and product strategist. Deep roots in Senegalese urban life. Understands the human problem from lived experience.
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">C2</div>
+      <div class="team-name">Co-Founder 02</div>
+      <div class="team-role">CTO · Engineering</div>
+      <div class="team-bio">
+        Technical lead with expertise in mobile development and AI. Building the Wolof language layer and the backend infrastructure that powers real-time mobility data.
+      </div>
+    </div>
+  </div>
+
+  <div class="big-quote">
+    "We are not outsiders building for Senegal.<br>We are Senegal, building for ourselves."
+  </div>
+
+  <div style="margin-top:8px;">
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:16px;">Advisory & Partnership Targets</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;">
+      <div style="background:rgba(232,147,10,0.08);border:1px solid rgba(232,147,10,0.2);padding:10px 18px;border-radius:4px;font-size:12px;">CETUD — Transport Authority</div>
+      <div style="background:rgba(232,147,10,0.08);border:1px solid rgba(232,147,10,0.2);padding:10px 18px;border-radius:4px;font-size:12px;">Baamtu Datamation — Wolof AI</div>
+      <div style="background:rgba(232,147,10,0.08);border:1px solid rgba(232,147,10,0.2);padding:10px 18px;border-radius:4px;font-size:12px;">Google Research Africa</div>
+      <div style="background:rgba(232,147,10,0.08);border:1px solid rgba(232,147,10,0.2);padding:10px 18px;border-radius:4px;font-size:12px;">Wave Senegal — Payments</div>
+      <div style="background:rgba(232,147,10,0.08);border:1px solid rgba(232,147,10,0.2);padding:10px 18px;border-radius:4px;font-size:12px;">World Bank Urban Mobility Fund</div>
+      <div style="background:rgba(232,147,10,0.08);border:1px solid rgba(232,147,10,0.2);padding:10px 18px;border-radius:4px;font-size:12px;">Yango / Heetch / Yassir</div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 10: THE ASK -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark">
+  <div class="slide-num">10</div>
+  <div class="section-num">09 · The Ask</div>
+  <h2>Join us at<br><span class="gold">the starting line.</span></h2>
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <p class="large" style="margin-bottom:24px;">
+        We are seeking a <strong>strategic founding sponsor</strong> to help us move from idea to MVP — and a champion who believes African women can build African solutions.
+      </p>
+
+      <div class="ask-grid" style="max-width:480px;">
+        <div class="ask-item">
+          <div class="ask-num">$75K</div>
+          <div class="ask-desc">Seed Sponsorship Target</div>
+        </div>
+        <div class="ask-item">
+          <div class="ask-num">12 mo</div>
+          <div class="ask-desc">Runway to Public Launch</div>
+        </div>
+      </div>
+
+      <div style="margin-top:28px;">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:14px;">What the funding covers</div>
+        <div style="font-size:13px;opacity:0.7;line-height:2.2;">
+          ✦ MVP development (iOS + Android + USSD)<br>
+          ✦ Wolof ASR model fine-tuning & integration<br>
+          ✦ Live traffic data infrastructure<br>
+          ✦ Yango + Heetch API partnerships<br>
+          ✦ Beta user acquisition (Dakar pilot)<br>
+          ✦ Legal incorporation & IP protection<br>
+          ✦ 2 full-time engineers + 1 community manager
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="background:rgba(232,147,10,0.06);border:1px solid rgba(232,147,10,0.3);border-radius:12px;padding:32px;">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:20px;">Sponsorship Tiers</div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="border-left:3px solid var(--saffron);padding-left:16px;">
+            <div style="font-weight:700;font-size:15px;color:var(--saffron);">🥇 Founding Partner — $50K+</div>
+            <div style="font-size:12px;opacity:0.65;margin-top:4px;line-height:1.7;">Co-branding on all materials · App splash screen · Board observer seat · First right to data API · Press co-announcement</div>
+          </div>
+          <div style="border-left:3px solid rgba(232,147,10,0.5);padding-left:16px;">
+            <div style="font-weight:700;font-size:15px;">🥈 Launch Partner — $20K</div>
+            <div style="font-size:12px;opacity:0.65;margin-top:4px;line-height:1.7;">In-app branding · Featured in press kit · Preferred advertising rate · Named in Women in Tech Summit announcement</div>
+          </div>
+          <div style="border-left:3px solid rgba(232,147,10,0.3);padding-left:16px;">
+            <div style="font-weight:700;font-size:15px;">🥉 Community Partner — $5K</div>
+            <div style="font-size:12px;opacity:0.65;margin-top:4px;line-height:1.7;">Logo in app credits · Social media shoutout · Impact report co-branding</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;background:rgba(45,74,45,0.3);border:1px solid rgba(45,74,45,0.6);border-radius:8px;padding:20px;">
+        <div style="font-size:13px;opacity:0.8;line-height:1.8;">
+          <strong>Why sponsor now?</strong> Dakar just received $100M from the World Bank for urban mobility. The BRT launched in 2024. The city is ready. The infrastructure is here. The only thing missing is the app that speaks to everyone.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">Jakkal · Sponsor Pitch · 2026</div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SLIDE 11: CLOSE -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="slide bg-dark" style="text-align:center; align-items:center;">
+  <div class="circle-deco" style="width:700px;height:700px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+  <div class="circle-deco" style="width:400px;height:400px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+
+  <div style="position:relative;z-index:2;">
+    <div style="font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--saffron);margin-bottom:24px;">Women in Tech Summit · Dakar · April 2026</div>
+
+    <div class="hero-logo" style="font-size:clamp(72px,16vw,160px);">JAKKAL</div>
+
+    <div style="font-size:clamp(16px,3vw,26px);font-family:'Playfair Display',serif;font-style:italic;margin-top:20px;color:var(--sand);">
+      "Xam sa jakkal." — Know your road.
+    </div>
+
+    <div class="divider" style="margin:32px auto;"></div>
+
+    <div style="font-size:14px;opacity:0.6;line-height:2;">
+      jakkal.sn &nbsp;·&nbsp; hello@jakkal.sn &nbsp;·&nbsp; @jakkalapp
+    </div>
+
+    <div class="big-quote" style="margin:40px auto;max-width:600px;text-align:left;">
+      Dakar loses $1.4 billion a year to bad roads and bad information. JAKKAL gives every Dakarois — no matter their language, their phone, or their literacy — the power to move.
+    </div>
+
+    <div style="font-size:16px;font-weight:600;margin-top:8px;">Let's build the road together.</div>
+
+    <div class="slide-num" style="position:relative;right:auto;top:auto;margin-top:48px;opacity:0.15;font-size:13px;">END OF DECK</div>
+  </div>
+</section>
+
+</body>
+</html>
